@@ -1,0 +1,82 @@
+{
+ "CHEMBL4523582": {
+  "receptor_pdbqt": "receptors/CHEMBL4523582_receptor.pdbqt",
+  "box_center": [
+   9.9,
+   -31.26,
+   19.56
+  ],
+  "box_size": [
+   22,
+   22,
+   22
+  ],
+  "pdb_id": "7K40",
+  "target_name": "SARS-CoV-2 main protease (Mpro)",
+  "context": "SARS-CoV-2 Mpro cysteine protease, substrate binding site S1/S2 pockets"
+ },
+ "CHEMBL612545": {
+  "receptor_pdbqt": "receptors/CHEMBL612545_receptor.pdbqt",
+  "box_center": [
+   13.9,
+   6.07,
+   183.23
+  ],
+  "box_size": [
+   22,
+   22,
+   22
+  ],
+  "pdb_id": "5J89",
+  "target_name": "PD-L1",
+  "context": "PD-L1 immune checkpoint protein, C-D loop beta-sheet PPI inhibitor binding site"
+ },
+ "CHEMBL3717": {
+  "receptor_pdbqt": "receptors/CHEMBL3717_receptor.pdbqt",
+  "box_center": [
+   -3.9,
+   -50.25,
+   -7.25
+  ],
+  "box_size": [
+   22,
+   22,
+   22
+  ],
+  "pdb_id": "4EY6",
+  "target_name": "Acetylcholinesterase",
+  "context": "acetylcholinesterase active site gorge, catalytic triad Ser203/His447/Glu334"
+ },
+ "CHEMBL4005": {
+  "receptor_pdbqt": "receptors/CHEMBL4005_receptor.pdbqt",
+  "box_center": [
+   20.04,
+   -6.05,
+   23.74
+  ],
+  "box_size": [
+   20,
+   20,
+   20
+  ],
+  "pdb_id": "2IKH",
+  "target_name": "Aldose reductase",
+  "context": "aldose reductase NADPH-binding site, anion binding subsite, diabetic complication target"
+ },
+ "CHEMBL3778": {
+  "receptor_pdbqt": "receptors/CHEMBL3778_receptor.pdbqt",
+  "box_center": [
+   8.41,
+   -9.7,
+   7.89
+  ],
+  "box_size": [
+   20,
+   20,
+   20
+  ],
+  "pdb_id": "4JRG",
+  "target_name": "MDM2",
+  "context": "MDM2 p53-binding domain, Phe19/Trp23/Leu26 hydrophobic hotspot, PPI inhibitor site"
+ }
+}

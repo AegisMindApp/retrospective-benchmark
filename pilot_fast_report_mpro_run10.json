@@ -1,0 +1,100 @@
+{
+  "primary_metric": "EF@1%",
+  "exhaustiveness": 4,
+  "n_workers": 3,
+  "per_target": {
+    "CHEMBL4523582": {
+      "chance": {
+        "EF@1%": 0.0,
+        "EF@5%": 0.6608333333333333,
+        "BEDROC": 0.05197382224396118,
+        "AUROC": 0.41314984709480274,
+        "n": 793,
+        "n_active": 30,
+        "EF@1%_ci": [
+          0.0,
+          0.0,
+          4.13
+        ]
+      },
+      "fp_similarity": {
+        "EF@1%": 23.129166666666666,
+        "EF@5%": 15.199166666666667,
+        "BEDROC": 0.7572813264248652,
+        "AUROC": 0.8896461336828314,
+        "n": 793,
+        "n_active": 30,
+        "EF@1%_ci": [
+          23.129,
+          17.091,
+          36.045
+        ]
+      },
+      "vina": {
+        "EF@1%": 0.0,
+        "EF@5%": 1.3216666666666665,
+        "BEDROC": 0.1236034468607373,
+        "AUROC": 0.5663171690694623,
+        "n": 793,
+        "n_active": 30,
+        "EF@1%_ci": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "platform": {
+        "EF@1%": 0.0,
+        "EF@5%": 0.6608333333333333,
+        "BEDROC": 0.09716461692472135,
+        "AUROC": 0.6169943206640456,
+        "n": 793,
+        "n_active": 30,
+        "EF@1%_ci": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "decoy_report": {
+    "CHEMBL4523582": {
+      "status": "ok",
+      "n_actives": 30,
+      "n_decoys": 750,
+      "debias_auroc": 0.5433333333333332,
+      "scaffold_count": 20
+    }
+  },
+  "skipped": [],
+  "panel_tests": {
+    "platform_vs_vina": {
+      "n_targets": 1,
+      "mean_delta": 0.0,
+      "median_delta": 0.0,
+      "wins": 0,
+      "losses": 0,
+      "wilcoxon_stat": NaN,
+      "p_value": 1.0
+    },
+    "platform_vs_chance": {
+      "n_targets": 1,
+      "mean_delta": 0.0,
+      "median_delta": 0.0,
+      "wins": 0,
+      "losses": 0,
+      "wilcoxon_stat": NaN,
+      "p_value": 1.0
+    },
+    "vina_vs_chance": {
+      "n_targets": 1,
+      "mean_delta": 0.0,
+      "median_delta": 0.0,
+      "wins": 0,
+      "losses": 0,
+      "wilcoxon_stat": NaN,
+      "p_value": 1.0
+    }
+  }
+}

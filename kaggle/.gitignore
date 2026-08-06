@@ -1,0 +1,5 @@
+# Generated shard bundles: ~8 MB of ligand PDBQTs each, fully reproducible from
+# frozen_compounds_<tid>.json via make_bundle.py. The frozen list IS committed —
+# it is the artifact the run depends on, and it carries the md5.
+bundle_*/
+*.log

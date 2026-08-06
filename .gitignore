@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+bin/vina
+*.log
+vina_cache_*.json.tmp
+kaggle/bundle_*/
