@@ -9,10 +9,29 @@
 >
 > **The headline finding is not the one this README was originally written for.** The
 > question below ("does the platform beat commodity docking?") could not be answered as
-> posed: the debias gate excluded all but one of 14 targets. What the study reports instead
-> is that **benchmark admissibility is unstable under active-set subsampling** — gate
-> verdicts flip in *both* directions with the number of actives sampled, a variable that is
-> near-universally capped for compute reasons and rarely reported.
+> posed: enforced without exception, the debias gate excluded **every validated target
+> assessed**.
+>
+> Exactly one library passed — and it was **not a target**. `CHEMBL612545` is a ChEMBL
+> `UNCHECKED` record with no organism, no target components and 2.3 million heterogeneous
+> activities; it had been paired with a genuine PD-L1 receptor structure by a hand-written
+> label. Its "actives" are HCN1 channel blockers and IL-6 release inhibitors sharing no
+> pharmacophore, and it passed **because** of that: a set with no coherent property
+> signature has nothing for a debias classifier to separate, so it scored the cleanest
+> value in the study.
+>
+> **A debias gate cannot distinguish property-diverse actives from a set that is not a
+> target at all, and the second case passes most easily.** See Amendment 21 in
+> `PREREGISTRATION.md` for the evidence, the mechanism, and how the error survived twenty
+> amendments and a public release.
+>
+> Secondary finding: gate verdicts depend on how many actives were sampled — SARS-CoV-2
+> Mpro qualified at 30 actives (AUROC 0.543) and was excluded at 85 (0.665).
+>
+> **Caches and results in this repository from the `CHEMBL612545` docking run are retained
+> for transparency but are not evidence about anything.** That run was stopped on
+> discovery. Note also that `CHEMBL4005` is recorded throughout as "aldose reductase"; it
+> is PI3Kα.
 
 Does the AegisMind platform predict real drug-discovery outcomes **better than commodity
 docking, on data it could not have seen**? This harness answers that with a pre-registered,

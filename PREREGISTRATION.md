@@ -1078,3 +1078,83 @@ they would have been docked after roughly 60 hours — defeating the purpose of 
 warning. `merge_shards.py` refused both shards with "no calibration overlap", which is
 the gate behaving correctly, but it should not have been reachable. Ordering corrected
 before any remote result was merged.
+
+---
+
+# Amendment 21 — the qualifying target is not a target (2026-08-07)
+
+**Discovered while writing §3.1/§3.2 of the manuscript, after the repository had been made
+public and 1,145 of 2,526 compounds had been docked. All runs stopped on discovery.**
+
+## A21.1 What was found
+
+`prepare_receptors.py` pairs PDB **5J89** — a genuine PD-L1 structure — with ChEMBL target
+**CHEMBL612545**, labelled `target_name: "PD-L1"`. The receptor is PD-L1. The ChEMBL
+identifier is not.
+
+CHEMBL612545 is a ChEMBL **`UNCHECKED`** record: `pref_name` "Unchecked", no organism,
+**zero target components**, and **2,317,536 activities** spanning unrelated assay types.
+It is a catch-all bucket for bioactivities with no validated target assignment.
+
+Human PD-L1 is **CHEMBL3580522**.
+
+## A21.2 Evidence
+
+The panel's stored `pchembl` values match records in the unchecked bucket exactly:
+
+| Panel record | Assay actually matched in CHEMBL612545 |
+|---|---|
+| CHEMBL6195028, 6.51, IC50 | Inhibition of human HCN1/PEX5L with TRIP8b, HEK293 |
+| CHEMBL5569030, 7.54, IC50 | Inhibition of LPS-stimulated IL-6 release, human PBMC |
+| CHEMBL6192612, 7.78, IC50 | Inhibition of LPS-stimulated IL-6 release, human PBMC |
+
+Of 12 sampled "actives", **1** has any recorded activity against CHEMBL3580522. The set
+is composed largely of HCN1 channel blockers and IL-6 release inhibitors.
+
+An initial reading of this attributed one active to a metabolic-stability assay; that came
+from an unfiltered query and is corrected here.
+
+## A21.3 What it invalidates
+
+- PD-L1's gate results at both active counts (0.620 at n=21; 0.585 at n=82).
+- The claim that gate verdicts flip **in both directions**. Only the Mpro reversal
+  survives — qualified at 30 actives (0.543), excluded at 85 (0.665) — and it is a real
+  target, unaffected by this.
+- The claim that **one** target qualifies at full active count. The correct figure is
+  **zero**; the qualification was an artefact.
+- Amendment 18, and the entire §3.3 enrichment run authorised by it.
+
+## A21.4 Why it passed the gate — the finding that replaces it
+
+The debias gate excludes a target when its actives are separable from property-matched
+decoys. Thirteen coherent target sets were excluded because their actives cluster in
+property space in target-specific ways.
+
+An incoherent set — HCN1 blockers, IL-6 inhibitors and unrelated chemistry sharing no
+pharmacophore — has **no coherent property signature**, so the logistic regression cannot
+separate it from property-matched decoys. It passed the gate *because* it is not a target.
+
+**A debias gate cannot distinguish "property-diverse actives" from "not a target at all",
+and the second case passes most easily.** A target-coherence check therefore belongs
+upstream of the debias gate. This is a stronger and more transferable result than the
+finding it replaces, and it was produced by the failure rather than despite it.
+
+## A21.5 Process failure
+
+The pre-flight gates adopted after the MSH3/MSH2 chain error include target-identity
+verification. That check is written for the **receptor** and passed correctly: 5J89 is
+PD-L1. The error was in the **ligand set**, which no gate examined. Target identity must be
+verified on both sides of a docking experiment, and the identifier used to fetch actives
+must be confirmed to be a validated single-protein target — not merely to exist.
+
+The label "PD-L1" was carried in a hand-written dictionary and never checked against the
+ChEMBL record it was paired with. It survived twenty amendments and a public release.
+
+## A21.6 Actions
+
+1. All docking stopped (local, harvest, Mpro queue, relaunch watcher). Caches retained:
+   1,145 of 2,526 in the merged cache; shard caches 233 and 363.
+2. Zenodo deposit **10.5281/zenodo.21824633 not published** — it was still a draft.
+3. `AegisMindApp/retrospective-benchmark` is public and carries the error; correction to
+   follow rather than deletion, since the repository is now citable.
+4. `CHEMBL4005` is additionally mislabelled: it is **PI3Kα**, not aldose reductase.
