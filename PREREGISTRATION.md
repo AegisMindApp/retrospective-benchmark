@@ -1581,3 +1581,32 @@ The repaired-receptor and descriptor-baseline figures come from a separate analy
 here. They are quoted so a reader is not left with a superseded number, but they cannot be checked
 from this repository. The limitation is the same one `PROVENANCE.md` states about the freeze commit,
 and it is named rather than left for a reader to discover.
+
+---
+
+# Amendment 29 — A28.4 was wrong: the correcting figures are checkable (2026-09-21)
+
+Amendment 28.4, written earlier the same day, said the repaired-receptor and descriptor-baseline
+figures "cannot be checked from this repository" and were "attested, not verifiable". The first
+half is true and the second is **false**, and the distinction is the entire point of saying it.
+
+Those figures are public. They are in the companion repository
+`github.com/AegisMindApp/screening-decomposition` — `analysis/docking_value/MARGINAL_VALUE.md`
+carries the marginal-value table verbatim, `analysis/receptor_prep/` carries the donor defect that
+caused the numbers to move, `analysis/docking_audit/RESULT.md` carries PD-L1's 0.9145, and
+`analysis/boltz2/` carries the Boltz-2 margins. `RESULTS_STATUS.md` now maps each figure to its
+file.
+
+**How the error happened, since it is the same shape as several the study documents.** The question
+asked was "are these figures in *this* repository", the answer was no, and that was recorded as
+"unverifiable" — a property of the claim — when it was a property of where I had looked. An absence
+in one place read as an absence everywhere. That is the failure this project has logged repeatedly
+under other names, committed here in a paragraph whose purpose was to be scrupulous about exactly
+this.
+
+**What was NOT done, deliberately.** The obvious response is to copy those directories into this
+repository. Two copies of one result in two repositories drift, and a reader then cannot tell which
+is current. One location, cross-referenced from the other, is correct. A28.4 is superseded by this
+amendment rather than edited, per the append-only rule.
+
+The freeze-date limitation in `PROVENANCE.md` is unaffected and still stands.

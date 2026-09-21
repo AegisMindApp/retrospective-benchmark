@@ -52,12 +52,29 @@ descriptors: **+0.0934 [+0.0616, +0.1253]** on Mpro and **+0.0751 [+0.051, +0.09
 against a +0.04 margin fixed in advance. Boltz-2 alone does not clear it. So the structure-based
 information that helps is not coming from docking.
 
-## What is still not checkable from this repository
+## Where the correcting figures can be checked
 
-The repaired-receptor and descriptor-baseline numbers quoted above were produced in a separate
-analysis that has not been exported here. They are stated so that a reader is not left with a
-superseded figure, but within this repository they are **attested, not verifiable** — the same
-standing limitation `PROVENANCE.md` records about the pre-registration freeze commit. The result
-documents in `results/` are verifiable here; the corrections to them are not yet.
+They are not in this repository, and they do not need to be copied here: they live in the
+companion repository **`github.com/AegisMindApp/screening-decomposition`**, which is public. Each
+figure quoted above resolves to a file there.
 
-Saying so is cheaper than the alternative, which is a reader discovering it.
+| figure | what it is | file in `screening-decomposition` |
+|---|---|---|
+| **0.4530** | Mpro Vina, repaired receptor | `analysis/pose_ensemble/PROTONATED_RESULT.md`, `analysis/boltz2/RESULT.md` |
+| **0.6775** | Factor Xa Vina, repaired receptor | `analysis/receptor_prep/FXA_RESULT.md`, `analysis/docking_audit/RESULT.md` |
+| **0.7653 / 0.7129** | seven-descriptor baselines | `analysis/docking_value/MARGINAL_VALUE.md` |
+| **−0.0023 / +0.0150** | what docking adds over them | `analysis/docking_value/MARGINAL_VALUE.md` |
+| **0.9145** | PD-L1 descriptor separability | `analysis/docking_audit/RESULT.md` |
+| **+0.0934 / +0.0751** | descriptors + Boltz-2 margins | `analysis/boltz2/RESULT.md`, `analysis/boltz2/FXA_RESULT.md` |
+| the donor defect itself | why repair changed the numbers | `analysis/receptor_prep/DONOR_DEFECT.md` |
+
+**Copying them here was considered and rejected.** Two copies of the same result in two
+repositories drift, and a reader then has no way to tell which is current — that is the defect this
+project keeps finding in other people's work and has now found four times in its own. One location,
+cited from the other, is the correct arrangement.
+
+## What is genuinely still not checkable
+
+The **freeze date** of the original pre-registration. `PROVENANCE.md` states it: this repository is
+an extract, its commit SHAs are new, and the original commit `92c6f8bf` (2026-07-14) is in a
+private tree. That limitation stands and is not closed by anything above.
