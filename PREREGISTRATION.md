@@ -1481,3 +1481,56 @@ for every target assessed; the pooled-target and null-library experiments and th
 the docking caches; and the process failures — silent rigid-ligand preparation, a target
 identifier that was not a target, a stale hardcoded version string, and two proposed
 mechanisms that did not survive testing.
+
+---
+
+# Amendment 27 — corrections to the public extract (2026-09-21)
+
+Recorded on republication. Neither item changes any result; both correct the **artefact** rather
+than the analysis, and both are the kind of defect this study exists to document.
+
+## A27.1 The published `make_bundle.py` was the pre-fix version
+
+The extract taken on 7 Aug 2026 shipped the bundling script as it stood on that date. It resolved
+the receptor by the naming convention `receptors/{target_id}_receptor.pdbqt` rather than from the
+path recorded in `receptors.json`. On PD-L1 the convention path held **5J89**, which had failed its
+redocking gate, while the configuration pointed at **5J8O**, which passed. A run would have docked
+455 ligands against the failed structure using the passing structure's box — a different crystal
+frame, so the box sat in empty solvent — and returned a well-formed AUROC with no exception and
+nothing in any log. It was caught by comparing receptor md5s (`b83fcd22` against `4ca3a9d9`)
+minutes before compute, and fixed in the private tree on 23 Aug.
+
+**That fix had not reached this repository**, so anyone reusing the published script inherited the
+defect. The corrected version is now here: it reads the receptor path from `receptors.json` and
+fails loudly when the file is absent.
+
+The general rule, which is cheaper than the md5 check that caught it: **a path built by naming
+convention will eventually disagree with the path in the configuration.** Prefer the configuration
+field.
+
+## A27.2 The configured Mpro receptor was 7K40; the study used 7VU6
+
+Amendments 19 and 20 list **7K40** as the SARS-CoV-2 Mpro receptor, and it appears in a validation
+note. Those entries are correct as a record of what was configured at the time and are left
+unedited, because this log is append-only. But 7K40 was subsequently **rejected**, for two reasons
+recorded in the Mpro result:
+
+- its co-crystal ligand is **covalent to Cys145**, which a non-covalent scoring function cannot
+  represent; and
+- the configured box sat **6.3 Å off the ligand centroid**.
+
+Four alternatives were tested and **7VU6 was adopted**, passing the redocking gate at
+exhaustiveness 32 — the value the screen uses, not the 16 the gate was first validated at — with
+the top pose at **1.01 Å at rank 1**, the next pose 5.88 Å and 0.38 kcal/mol behind.
+
+A reader following 7K40 out of this document would be following a receptor the study discarded.
+
+## A27.3 What is still not in this repository
+
+Stated so the omission is not mistaken for absence of the work. The extract carries the
+pre-registration, the amendment log and the code. It does **not** carry the per-target result
+documents — Mpro, PD-L1, Factor Xa, the target-selection record, or the model-versus-docking
+comparison. Those postdate the 7 Aug extract in part (Factor Xa was run 25–29 Aug) and have not
+been exported. Until they are, results quoted from this study elsewhere cannot be checked against
+this repository, and should be treated as attested rather than verifiable — the same standing
+limitation `PROVENANCE.md` states about the freeze commit.

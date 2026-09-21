@@ -36,6 +36,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 PARENT = os.path.dirname(HERE)
 sys.path.insert(0, PARENT)
+sys.path.insert(0, os.path.join(os.path.dirname(PARENT), "amr_glass", "docking"))
 
 VINA_BIN = os.environ.get("VINA_BIN", os.path.join(PARENT, "bin", "vina"))
 
@@ -61,6 +62,12 @@ def main() -> int:
                     help="already-docked compounds replanted in each shard so the "
                          "remote environment can be checked against the local one")
     ap.add_argument("--outdir", default=None)
+    ap.add_argument("--also-assigned", nargs="*", default=[],
+                    help="manifest.json files whose compounds are already handed to some "
+                         "other shard. Without this, 'remaining' is computed from the LOCAL "
+                         "cache alone, so a second bundle re-hands work the first already "
+                         "holds — which is how 499 compounds of this target ended up in no "
+                         "bundle at all while others sat in two.")
     a = ap.parse_args()
 
     frozen_p = os.path.join(HERE, f"frozen_compounds_{a.tid}.json")
@@ -73,16 +80,33 @@ def main() -> int:
     cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
     done = {k[len("bench_"):] if k.startswith("bench_") else k for k in cache}
 
-    remaining = [(i, c) for i, c in enumerate(comps) if c["name"] not in done]
+    assigned = set()
+    for mp in a.also_assigned:
+        for c in json.load(open(mp))["compounds"]:
+            assigned.add(c["name"])
+    if assigned:
+        print(f"{len(assigned)} compounds already assigned to other shards — excluded")
+
+    remaining = [(i, c) for i, c in enumerate(comps)
+                 if c["name"] not in done and c["name"] not in assigned]
     print(f"{len(comps)} total, {len(done)} docked, {len(remaining)} remaining")
 
     take = a.count or len(remaining)
     tail = remaining[-take:]          # from the tail; local works the head
     print(f"handing {len(tail)} to Kaggle (frozen idx {tail[0][0]}..{tail[-1][0]})")
 
+    # Take the receptor path from receptors.json, NOT from the {tid}_receptor.pdbqt
+    # naming convention. On PD-L1 the convention path held a receptor that had FAILED
+    # its redocking gate (5J89) while receptors.json pointed at the one that passed
+    # (5J8O); the bundle would have docked 455 ligands against the failed structure
+    # using the passing structure's box -- a different crystal frame, so the box sat
+    # in empty space -- and returned a perfectly well-formed AUROC. Only the receptor
+    # md5 check caught it.
     receptor = os.path.join(PARENT, "receptors", f"{a.tid}_receptor.pdbqt")
     recjson = json.load(open(os.path.join(PARENT, "receptors.json")))[a.tid] \
         if os.path.exists(os.path.join(PARENT, "receptors.json")) else None
+    if recjson and recjson.get("receptor_pdbqt"):
+        receptor = recjson["receptor_pdbqt"]
     if recjson is None:
         raise SystemExit("receptors.json not found — need box_center/box_size")
 
@@ -91,7 +115,7 @@ def main() -> int:
         shutil.rmtree(outroot)
 
     # Ligand prep, locally, with this machine's toolchain.
-    import vina_tools as rvd            # noqa: E402
+    import run_vina_docking as rvd            # noqa: E402
     print(f"\npreparing ligand PDBQTs locally (RDKit+Meeko stay on THIS machine) ...")
 
     # Calibration controls: compounds ALREADY docked locally, replanted in every
