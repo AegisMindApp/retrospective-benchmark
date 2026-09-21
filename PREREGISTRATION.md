@@ -1534,3 +1534,50 @@ comparison. Those postdate the 7 Aug extract in part (Factor Xa was run 25–29 
 been exported. Until they are, results quoted from this study elsewhere cannot be checked against
 this repository, and should be treated as attested rather than verifiable — the same standing
 limitation `PROVENANCE.md` states about the freeze commit.
+
+---
+
+# Amendment 28 — result documents exported (2026-09-21)
+
+Amendment 27.3 recorded that this repository carried the design and the code but none of the
+per-target results, and that results quoted from this study elsewhere therefore could not be
+checked against it. That is now closed for the results themselves.
+
+## A28.1 What was added
+
+`results/` — Mpro, PD-L1 and Factor Xa result documents, the two pre-analyses fixing their reading
+rules before the data existed, the target-3 selection record, the model-versus-docking comparison
+(which carries its own correction: its panel is `CHEMBL612545`, not a target), and the assessment
+of whether modern deep-learning docking had been tested.
+
+## A28.2 Each carries a status banner, and the public copies therefore differ from the private ones
+
+Three headline numbers moved after these documents were written, so publishing them unmarked would
+leave a reader with a superseded figure and no signal. Each file gains a banner pointing at
+`RESULTS_STATUS.md`; the bodies are otherwise byte-identical to the private originals and are **not**
+edited to match the present, because a record edited to agree with today cannot show what was
+believed when.
+
+The changes, none of which flipped a verdict:
+
+- **Mpro** 0.427 -> **0.4530**, and **Factor Xa** 0.6657 -> **0.6775**, both from repairing
+  receptors that were missing polar hydrogens. Below chance and above chance respectively, before
+  and after.
+- **PD-L1's conclusion was replaced by a stronger one.** "Not above chance" becomes "the panel is
+  property-separable, so no docking result on it bears on binding" — seven free descriptors reach
+  0.9145 on it.
+
+## A28.3 The claim the study actually supports
+
+Stated here because no single result document states it: every one of them compares docking against
+chance, and chance is the wrong comparator. Against seven free physicochemical descriptors, docking
+adds **-0.0023 [-0.0044, -0.0002]** on Mpro and **+0.0150 [-0.0033, +0.0339]** on Factor Xa. On
+neither does it add anything demonstrable; on Mpro it significantly subtracts. The general claim
+"docking is below chance" is **withdrawn** — true of Mpro, false of Factor Xa.
+
+## A28.4 What remains attested rather than verifiable
+
+The repaired-receptor and descriptor-baseline figures come from a separate analysis not exported
+here. They are quoted so a reader is not left with a superseded number, but they cannot be checked
+from this repository. The limitation is the same one `PROVENANCE.md` states about the freeze commit,
+and it is named rather than left for a reader to discover.

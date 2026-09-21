@@ -52,6 +52,11 @@
 > discovery. Note also that `CHEMBL4005` is recorded throughout as "aldose reductase"; it
 > is **PI3Kα**.
 >
+> **The results are in `results/`, and `RESULTS_STATUS.md` says where each one now stands.**
+> Three headline numbers moved after the documents were written — two by receptor repair, and
+> PD-L1's conclusion was replaced by a stronger one. No verdict flipped. Read the status file
+> before quoting any single result.
+>
 > **Why this repository is public again.** It was set private on 7 Aug 2026 because the
 > manuscript it supported was not being submitted (Amendment 26). Amendment 26.4 committed
 > to republishing it as a condition of any future use of the work, and it is now cited as a
