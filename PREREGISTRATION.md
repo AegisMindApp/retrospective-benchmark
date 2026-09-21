@@ -1158,3 +1158,326 @@ ChEMBL record it was paired with. It survived twenty amendments and a public rel
 3. `AegisMindApp/retrospective-benchmark` is public and carries the error; correction to
    follow rather than deletion, since the repository is now citable.
 4. `CHEMBL4005` is additionally mislabelled: it is **PI3Kα**, not aldose reductase.
+
+---
+
+# Amendment 22 — does an incoherent library pass the gate more easily? (2026-08-07)
+
+**Written and committed before the experiment is run.**
+
+## A22.1 Why
+
+Amendment 21 reports that the one library admitted by the debias gate was not a target,
+and proposes a mechanism: a set with no shared pharmacophore has no coherent property
+signature, so a property-based classifier cannot separate it from property-matched decoys,
+and it passes more easily than any real target.
+
+As it stands that mechanism is supported by **one accident**. A single malformed library
+scoring 0.585 is an anecdote, and it is legitimate to object that we made a data-handling
+error and are presenting it as a finding. This amendment converts the claim into a
+measurement, or refutes it.
+
+## A22.2 Design
+
+The debias gate (`decoys.debias_auroc`) is a logistic regression on seven descriptors. It
+requires no docking, so this experiment costs hours rather than weeks.
+
+- **Group A — real targets.** Each target with retained panel actives, subsampled to a
+  fixed *n* so that set size cannot confound the comparison.
+- **Group B — pooled pseudo-targets.** Sets of the same size *n*, drawn at random from the
+  union of actives across ≥ 3 different targets. These are incoherent by construction and
+  are exactly what a malformed identifier produces.
+- **Group C — positive control.** `CHEMBL612545`, the malformed library discovered in
+  Amendment 21, at the same *n*.
+
+Every set passes through the identical decoy protocol and the identical gate.
+
+## A22.3 Pre-committed prediction
+
+**Group B scores lower gate AUROC than Group A** — that is, incoherent libraries pass the
+gate more easily than real targets. Group C sits within the Group B distribution rather
+than the Group A distribution.
+
+Primary comparison: Mann–Whitney U on Group A versus Group B AUROCs, two-sided, α = 0.05.
+Reported alongside the medians and the full distributions.
+
+## A22.4 Falsification, and what it costs us
+
+**If Group B does not score lower than Group A, the mechanism proposed in Amendment 21 is
+wrong.** The explanation for CHEMBL612545 passing would then be unknown — plausibly chance —
+the paper would have no central finding, and we would not publish it. The repository and
+this pre-registration would remain as the record.
+
+We state this before running because the result decides whether a manuscript exists, and a
+prediction registered afterwards would be worthless.
+
+## A22.5 What this cannot establish
+
+One decoy generator, one descriptor set, one threshold. A positive result shows that *this*
+gate admits incoherent libraries preferentially; it does not establish the behaviour of
+every debias procedure. Pooled sets are also an imperfect model of a malformed identifier —
+they are drawn from real targets and so retain more internal structure than a genuine
+catch-all bucket. If anything that biases **against** the prediction, which we regard as
+the conservative direction.
+
+---
+
+# Amendment 23 — the Amendment 21 mechanism is REFUTED (2026-08-07)
+
+**Result of the experiment pre-registered in Amendment 22. Reported as registered,
+including that it goes against us.**
+
+## A23.1 Outcome
+
+| Group | n | Median gate AUROC | Range |
+|---|---|---|---|
+| A — real single targets (n ≈ 30) | 7 | **0.6167** | 0.5084 – 0.8873 |
+| B — pooled pseudo-targets (n ≈ 30, ≥ 3 sources) | 12 | **0.6765** | 0.4773 – 0.8172 |
+| C — `CHEMBL612545` malformed control | 1 | **0.4832** | — |
+
+Mann–Whitney U = 38.0, two-sided **p = 0.773**. The pooled median is **higher** than the
+real median, not lower.
+
+**The prediction registered in A22.3 is refuted.** Incoherent libraries do not pass the
+debias gate more easily. The mechanism proposed in Amendment 21 — that a set with no shared
+pharmacophore has no property signature to separate — does not survive its own test, and
+the claim is withdrawn.
+
+Per A22.4 this means the manuscript has no central finding as framed, and the reframed
+paper of 7 Aug is not publishable in that form.
+
+## A23.2 What still stands, and the corrected hypothesis
+
+The *observation* is unaffected: `CHEMBL612545` scores 0.4832 here and 0.585 at full count,
+passing comfortably while real targets do not. What is wrong is our explanation.
+
+Pooling actives from three or four real targets does not produce what a malformed
+identifier produces. A pooled set is a union of a few internally coherent clusters — still
+structured, still distinguishable from a broad drug-like background. The malformed bucket
+holds 2.3 million compounds spanning all of ChEMBL, so a sample from it is effectively a
+**random draw from drug-like chemical space** — which is the same space the decoys are
+drawn from.
+
+The corrected hypothesis is therefore not *incoherence* but **distributional identity**: the
+pseudo-target passes because its actives and its decoys are sampled from the same
+distribution, so no classifier can separate them. That is a sharper claim and it makes a
+different prediction — a set of random drug-like ChEMBL compounds used as pseudo-actives
+should score ≈ 0.5 and pass trivially.
+
+It is **not tested here**, and is recorded as a hypothesis, not a result. Testing it
+requires its own pre-registration.
+
+## A23.3 An unregistered but robust observation
+
+Group A was run at n ≈ 30 while the Amendment 16/17 re-gate used full active counts. The
+same targets, same protocol, differing only in active count:
+
+| Target | AUROC at n ≈ 30 | Verdict | AUROC at full count | Verdict |
+|---|---|---|---|---|
+| PI3Kα | 0.5084 | **qualifies** | 0.6510 | excluded |
+| Mpro | 0.5949 | **qualifies** | 0.6653 | excluded |
+| MET | 0.5204 | **qualifies** | 0.7608 | excluded |
+| BRD4 | 0.6167 | excluded | 0.6641 | excluded |
+| FXa | 0.6936 | excluded | 0.7081 | excluded |
+| IRAK4 | 0.8873 | excluded | 0.9026 | excluded |
+| VEGFR2 | 0.7856 | excluded | — | — |
+
+**3 of 7 targets qualify at n ≈ 30; 0 of 6 qualify at full active count.** Every target
+moves in the same direction — subsampling lowers the measured AUROC and makes qualification
+easier — and no target moves the other way.
+
+This is a far stronger version of §3.2, which rested on a single reversal (Mpro) plus one
+that turned out to belong to the pseudo-target. It is now seven targets moving consistently,
+with three verdict changes. It was not pre-registered as a hypothesis and is reported as an
+observation arising from the control group of another experiment.
+
+## A23.4 Consequence
+
+The paper's centre of gravity moves from "a debias gate admits non-targets preferentially"
+(refuted) to **"debias gate verdicts are an artefact of active-set size"** (measured, seven
+targets, consistent direction). The malformed-target episode becomes a documented failure of
+target validation rather than the central result.
+
+Whether that is publishable is a separate judgement, taken with the numbers in hand rather
+than in advance of them.
+
+---
+
+# Amendment 24 — does a library with no target relationship pass the gate? (2026-08-07)
+
+**Written and committed before the experiment is run.**
+
+## A24.1 Why
+
+Amendment 23 refuted the "incoherence" mechanism and proposed a replacement: the malformed
+library passes not because its actives are incoherent but because they are drawn from the
+**same distribution as the decoys**. Decoys are selected from drug-like ChEMBL space; a
+sample from a 2.3-million-compound catch-all is effectively a random draw from that same
+space, so the two are indistinguishable by construction.
+
+That hypothesis is recorded in A23.2 and untested. This amendment tests it.
+
+## A24.2 Design
+
+- **Group D — null libraries.** Sets of *n* ≈ 30 molecules sampled at random from drug-like
+  ChEMBL space, used as "actives". These have **no target relationship of any kind**. Each
+  passes through the identical decoy protocol and the identical gate.
+- Compared against Group A (real targets, median 0.6167) and Group B (pooled pseudo-targets,
+  median 0.6765) already measured under Amendment 22, and Group C (`CHEMBL612545`, 0.4832).
+
+## A24.3 Pre-committed prediction
+
+**Group D scores ≈ 0.5 and passes the 0.60 gate in the large majority of replicates**, and
+scores **lower than Group A**. `CHEMBL612545` (Group C, 0.4832) sits with Group D.
+
+Primary comparison: Mann–Whitney U on Group A versus Group D, two-sided, α = 0.05, plus the
+proportion of Group D replicates scoring below the 0.60 threshold.
+
+## A24.4 Falsification
+
+**If Group D scores like Group A (≥ 0.60, no significant difference), the distributional
+hypothesis is also wrong.** We would then have no explanation for the malformed library's
+behaviour, and — per the standard set in A22.4 — the malformed-target line would be dropped
+entirely. What would remain of the study is the active-set-size finding of A23.3 and
+nothing else.
+
+Two mechanisms will then have been proposed and refuted. We record in advance that a third
+will not be attempted: continuing to generate explanations until one survives is the
+re-rolling prohibited by §8 of the original registration.
+
+## A24.5 Anticipated objection
+
+A positive result is close to tautological: a property-matching procedure will of course
+fail to separate two samples from the same distribution. That is the point rather than a
+defect — the gate is *used* as a check that a benchmark is unbiased, and a check passed
+most easily by a library with no signal cannot support that use. We record the objection
+here so that it is not mistaken for an unanticipated criticism later, and we make no claim
+that the observation is novel until the literature has been checked.
+
+---
+
+# Amendment 25 — the null distribution is the finding (2026-08-07)
+
+**Result of the experiment pre-registered in Amendment 24.**
+
+## A25.1 Outcome
+
+| Group | n | Median | Range | Pass (< 0.60) |
+|---|---|---|---|---|
+| A — real targets (n ≈ 30) | 7 | 0.6167 | 0.508 – 0.887 | **3/7 (43%)** |
+| D — null libraries, no target relationship | 12 | 0.6030 | 0.511 – 0.821 | **6/12 (50%)** |
+| C — `CHEMBL612545` malformed | 1 | 0.4832 | — | passes |
+
+Mann–Whitney U = 47.0, two-sided **p = 0.711**.
+
+The A24.3 prediction was that Group D would score **≈ 0.5** and pass in the **large
+majority** of replicates. It scored 0.603 and passed in half. **The prediction is not
+supported on its quantitative content**, and the distributional hypothesis is not
+established.
+
+## A25.2 Both proposed mechanisms are now dropped
+
+Amendment 21 proposed incoherence; Amendment 23 refuted it. Amendment 23 proposed
+distributional identity; this amendment does not support it. Per the commitment recorded in
+A24.4, **no third mechanism is proposed.**
+
+The correct reading requires no mechanism at all. `CHEMBL612545` scored 0.4832, which sits
+below but adjacent to a null distribution spanning 0.511–0.821. Given that spread, a single
+library scoring 0.48 is **unremarkable**. The malformed library did not pass because of any
+special property. It passed because verdicts at this active-set size are close to
+uninformative — which is the actual finding, arrived at by two failed explanations.
+
+## A25.3 What the experiment did establish
+
+**A library with no target relationship whatsoever is statistically indistinguishable from
+a real target under this gate** (0.603 vs 0.617, p = 0.711), and passes at the same rate
+(50% vs 43%).
+
+**Five of seven real targets fall inside the null range.** At n ≈ 30 the metric's null
+distribution spans 0.511–0.821 — wider than the entire interval between "clean" and
+"badly biased" as the 0.60 threshold is normally interpreted.
+
+This is a statement about the metric, not about any target. A bias metric whose null
+distribution is that wide cannot support a per-target verdict at this sample size. It also
+explains the instability of A23.3 mechanically: small active sets produce high-variance
+estimates, so verdicts flip when *n* changes.
+
+## A25.4 The study's remaining claim
+
+Two measured results survive, and they are the same result seen from two directions:
+
+1. **Verdicts shift systematically with active-set size.** 3 of 7 targets qualify at
+   n ≈ 30; 0 of 6 at full active count; every target moves in the same direction (A23.3).
+2. **At n ≈ 30 the null distribution spans 0.511–0.821**, and real targets are not
+   separable from null libraries (p = 0.711). Five of seven real targets lie inside the
+   null range.
+
+Together: **a decoy-bias metric of this form, applied to active sets of the size routinely
+used, does not support the per-target admissibility judgements that are made with it.**
+Compute-driven active caps are near-universal and rarely reported.
+
+That is narrower than anything this study set out to claim, and it is the first claim in it
+that has survived an experiment designed to kill it. Nothing here concerns whether the
+AegisMind platform outperforms docking; that question (§1 of the original registration) was
+never executable and is not addressed.
+
+## A25.5 Literature position, stated honestly
+
+Training a classifier to separate actives from property-matched decoys, scored by AUROC, is
+established practice as a *bias diagnostic* — it is used, for example, in the DeepCoy work
+(Imrie et al., *Bioinformatics* 2021) and in Sieg et al. (*JCIM* 2019). Our use of it as a
+prospective inclusion criterion, and the observations above about its null distribution and
+sample-size dependence, were not located in two targeted literature searches. **Two searches
+are not a systematic review**, and no novelty claim should be made until a proper search is
+done.
+
+---
+
+# Amendment 26 — publication artefacts withdrawn (2026-08-07)
+
+Recorded so that the actions taken on this study are as fully logged as its results.
+
+## A26.1 What was withdrawn
+
+- **Zenodo deposit `10.5281/zenodo.21824633` deleted.** It was never published: the DOI was
+  reserved but never minted, and `https://doi.org/10.5281/zenodo.21824633` has never
+  resolved. Nothing was released and there is nothing to retract.
+- **`AegisMindApp/retrospective-benchmark` set private.** It had been public for
+  approximately one day, with zero stars, forks and watchers. Verified inaccessible
+  anonymously via API, raw content and web page.
+
+## A26.2 Why
+
+The manuscript's central claim did not survive its own tests. Amendment 21's mechanism was
+refuted by Amendment 23; the replacement was not supported by Amendment 25. What remains is
+a narrow, measured claim about the null distribution and sample-size dependence of a
+decoy-bias metric (A25.4) — worth a short methods note at most, and not currently being
+submitted.
+
+Publishing a repository and minting a permanent DOI in support of a manuscript that is not
+being submitted, and whose framing changed twice in the two days the artefacts existed, has
+no purpose. The work is retained in full privately.
+
+## A26.3 What this is not
+
+This is **not** a retraction, and it is not the withdrawal of a public claim: no claim was
+ever published. Nothing external cited either artefact. Had the DOI been minted, or had the
+repository been cited, the correct action would have been correction in place rather than
+removal — which is what was done on 7 Aug when the repository was public and carried the
+Amendment 21 error.
+
+## A26.4 Condition on any future use
+
+If any part of this study is submitted anywhere, the repository and this pre-registration
+must be made public again as a condition of submission. The residual limitation stands and
+must be stated: an extract cannot carry the original pre-registration commit `92c6f8bf`, so
+the freeze date is attested and reviewable on request rather than independently verifiable
+from the artefact.
+
+## A26.5 Record of what was learned
+
+Retained locally and unaffected by the withdrawal: twenty-six amendments; the gate results
+for every target assessed; the pooled-target and null-library experiments and their data;
+the docking caches; and the process failures — silent rigid-ligand preparation, a target
+identifier that was not a target, a stale hardcoded version string, and two proposed
+mechanisms that did not survive testing.

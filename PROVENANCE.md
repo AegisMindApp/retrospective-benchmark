@@ -28,7 +28,10 @@ reproduce the problem being reported.
 To provide a verifiable date that does not depend on the private repository, this extract
 is deposited to Zenodo, which issues its own timestamp and DOI:
 
-- **DOI: [10.5281/zenodo.21824633](https://doi.org/10.5281/zenodo.21824633)**
+- **DOI `10.5281/zenodo.21824633` was reserved but never minted and has never resolved.**
+  The draft deposit was deleted on 7 Aug 2026 (Amendment 26). It is named here only so that
+  anyone who saw it referenced in an earlier revision of these files knows there is nothing
+  behind it. There is no archived copy of this study.
 
   That is the *version* DOI for this deposit. Once published, Zenodo also mints a
   **concept DOI** that always resolves to the latest version; cite the concept DOI in

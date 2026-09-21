@@ -5,33 +5,60 @@
 > (2026-07-14) — see `PROVENANCE.md`, which states plainly what can and cannot be verified
 > from this repository.
 >
-> **Archived deposit:** [10.5281/zenodo.21824633](https://doi.org/10.5281/zenodo.21824633)
+> **There is no archived deposit.** A Zenodo DOI (`10.5281/zenodo.21824633`) was reserved
+> but never minted, and has never resolved; the draft was deleted on 7 Aug 2026. Earlier
+> revisions of this file linked it as an "archived deposit", which was wrong. Nothing was
+> ever published there and there is nothing to cite. See Amendment 26.
 >
-> **The headline finding is not the one this README was originally written for.** The
-> question below ("does the platform beat commodity docking?") could not be answered as
-> posed: enforced without exception, the debias gate excluded **every validated target
-> assessed**.
+> ---
 >
-> Exactly one library passed — and it was **not a target**. `CHEMBL612545` is a ChEMBL
-> `UNCHECKED` record with no organism, no target components and 2.3 million heterogeneous
-> activities; it had been paired with a genuine PD-L1 receptor structure by a hand-written
-> label. Its "actives" are HCN1 channel blockers and IL-6 release inhibitors sharing no
-> pharmacophore, and it passed **because** of that: a set with no coherent property
-> signature has nothing for a debias classifier to separate, so it scored the cleanest
-> value in the study.
+> **Read this before the study below: the question this repository was built to answer was
+> not answered, and the finding that replaced it was then refuted by our own later work.**
 >
-> **A debias gate cannot distinguish property-diverse actives from a set that is not a
-> target at all, and the second case passes most easily.** See Amendment 21 in
-> `PREREGISTRATION.md` for the evidence, the mechanism, and how the error survived twenty
-> amendments and a public release.
+> **1. The study could not run as designed.** Enforced without exception, the debias gate
+> excluded **every validated target assessed**. Exactly one library passed — and it was
+> **not a target**. `CHEMBL612545` is a ChEMBL `UNCHECKED` record with no organism, no
+> target components and 2.3 million heterogeneous activities, paired with a genuine PD-L1
+> receptor structure by a hand-written label. Its "actives" are HCN1 channel blockers and
+> IL-6 release inhibitors sharing no pharmacophore. Real human PD-L1 is `CHEMBL3580522`.
+> That error survived twenty amendments and a public release (Amendment 21).
+>
+> **2. The mechanism we proposed for it is refuted, by us.** Amendment 21 claimed the
+> malformed library passed *because* it was incoherent — that a set with no coherent
+> property signature gives a debias classifier nothing to separate. **Amendment 23 refuted
+> that** (pooled pseudo-targets median 0.6765 against real targets 0.6167, p = 0.773 — the
+> pooled median is *higher*). Amendment 24's replacement, distributional identity, **was
+> not supported by Amendment 25** (p = 0.711). Per the commitment recorded in A24.4, **no
+> third mechanism was proposed.** If you have read the Amendment 21 framing anywhere, it is
+> superseded.
+>
+> **3. What actually survives, and it needs no mechanism.** At the active-set sizes
+> routinely used in this literature, **this class of decoy-bias metric does not support
+> per-target admissibility judgements.** A library with no target relationship whatsoever
+> is statistically indistinguishable from a real target under the gate (0.603 against
+> 0.617, p = 0.711) and passes at the same rate (50% against 43%). **Five of seven real
+> targets fall inside the null range**, which at n ≈ 30 spans 0.511–0.821 — wider than the
+> entire interval between "clean" and "badly biased" as the 0.60 threshold is normally
+> read. `CHEMBL612545` scored 0.4832, which against that spread is unremarkable. It did not
+> pass because of any special property; verdicts at this sample size are close to
+> uninformative.
 >
 > Secondary finding: gate verdicts depend on how many actives were sampled — SARS-CoV-2
-> Mpro qualified at 30 actives (AUROC 0.543) and was excluded at 85 (0.665).
+> Mpro qualified at 30 actives (AUROC 0.543) and was excluded at 85 (0.665). Compute-driven
+> active caps are near-universal in this literature and seldom reported.
 >
 > **Caches and results in this repository from the `CHEMBL612545` docking run are retained
 > for transparency but are not evidence about anything.** That run was stopped on
 > discovery. Note also that `CHEMBL4005` is recorded throughout as "aldose reductase"; it
-> is PI3Kα.
+> is **PI3Kα**.
+>
+> **Why this repository is public again.** It was set private on 7 Aug 2026 because the
+> manuscript it supported was not being submitted (Amendment 26). Amendment 26.4 committed
+> to republishing it as a condition of any future use of the work, and it is now cited as a
+> worked case in a published audit checklist. The residual limitation stands and is
+> restated rather than dropped: an extract cannot carry the original pre-registration
+> commit, so the freeze date is attested and reviewable on request rather than
+> independently verifiable from this artefact alone.
 
 Does the AegisMind platform predict real drug-discovery outcomes **better than commodity
 docking, on data it could not have seen**? This harness answers that with a pre-registered,
